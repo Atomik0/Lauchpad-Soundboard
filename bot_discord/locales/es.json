@@ -1,0 +1,37 @@
+{
+	"dev": {
+		"description": "Comando de Desarrollador, para ver estadísticas del bot.",
+		"result": "Hay un total de {servers} servidores utilizando este bot."
+	},
+	"ping": {
+		"description": "Muestra la latencia media del bot (ping)",
+		"result": "Latencia media a la API: {ping} ms"
+	},
+	"help": {
+		"description": "Muestra todos los comandos y descripciones",
+		"embedTitle": "Ayuda con {botname}",
+		"embedDescription": "Listado de comandos"
+	},
+	"uptime": {
+		"description": "Comprueba el tiempo desde que se inició el bot",
+		"result": "Tiempo en línea: `{days} día(s), {hours} horas, {minutes} minutos, {seconds} segundos`"
+	},
+	"join": {
+		"description": "Une el bot al canal de voz actual del usuario.",
+		"noChannel": "¡Debes estar conectado a un canal de voz para usar este comando!",
+		"success": "Conectado exitosamente al canal de voz **{channel}**."
+	},
+	"leave": {
+		"description": "Desconecta el bot del canal de voz.",
+		"noConnection": "El bot no está conectado a ningún canal de voz.",
+		"success": "Desconectado del canal de voz."
+	},
+	"stop": {
+		"description": "Detiene el sonido que se esté reproduciendo.",
+		"success": "Reproducción de sonido detenida."
+	},
+	"common": {
+		"cooldownMessage": "Por favor espera {time} segundos antes de volver a usar el comando `{name}`.",
+		"errorCommand": "Se produjo un error con ese comando."
+	}
+}

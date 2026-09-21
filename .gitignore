@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output (Electron packaged app)
+app/dist_exe/
+app/dist_linux/
+
+# Audio files (personal sounds)
+app/public/sounds/custom/*
+!app/public/sounds/custom/.gitkeep
+
+# Environment variables and private credentials
+.env
+bot_discord/.env
+vps_credentials.json*
+app/public/vps_default.json
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+_backup_personal/
+app/_backup_personal/
+*.user_backup
+
+# Arduino build artifacts
+firmware/**/build/
+
+# Bot Discord compiled output
+bot_discord/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Gemini / Antigravity IDE
+.gemini/
+.agents/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Release archives (distributed via GitHub Releases, never committed to git)
+*.tar.gz
+*.zip
+*.AppImage
+dist/
