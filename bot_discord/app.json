@@ -1,0 +1,13 @@
+{
+  "name": "DJM BOT",
+  "description": "Discord Music Bot built with discord.js",
+  "repository": "https://vktrdev.cl/",
+  "logo": "https://www.vktrdev.cl/img/VKTRDev-Logo.png",
+  "keywords": [
+    "discord",
+    "discordjs",
+    "typescript",
+    "music",
+    "bot"
+  ]
+}

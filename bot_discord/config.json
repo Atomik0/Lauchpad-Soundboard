@@ -1,0 +1,8 @@
+{
+  "TOKEN": "TU_DISCORD_BOT_TOKEN_AQUI",
+  "PREFIX": "/",
+  "LOCALE": "es",
+  "NAME": "DJM BOT",
+  "TYPE": 0,
+  "PORT": 3002
+}

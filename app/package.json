@@ -1,0 +1,20 @@
+{
+  "name": "launchpad-8x8-soundboard",
+  "description": "Soundboard interactiva para Discord con Launchpad 8x8 físico",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:exe": "node build_exe.js",
+    "build:linux": "node build_linux.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jszip": "^3.10.2",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "electron": "^41.7.1",
+    "electron-packager": "^17.1.2"
+  },
+  "version": "1.0.14"
+}
