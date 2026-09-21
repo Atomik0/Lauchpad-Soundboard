@@ -1,0 +1,5 @@
+node_modules
+dist
+.git
+storage/sounds/*
+!storage/sounds/.gitkeep
