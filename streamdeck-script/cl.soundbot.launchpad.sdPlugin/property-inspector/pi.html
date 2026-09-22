@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Reproducir Sonido</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #2D2D2D;
+      color: #d8d8d8;
+      font-size: 12px;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 4px;
+      color: #9b9b9b;
+    }
+
+    input[type=file],
+    input[type=range],
+    input[type=text],
+    input[type=password] {
+      width: 100%;
+      box-sizing: border-box;
+      background: #3D3D3D;
+      color: #d8d8d8;
+      border: 1px solid #454545;
+      border-radius: 4px;
+      padding: 4px;
+    }
+
+    .filename {
+      font-size: 11px;
+      color: #9b9b9b;
+      word-break: break-all;
+      margin-top: 4px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #454545;
+      margin: 16px 0;
+    }
+
+    small {
+      color: #7a7a7a;
+    }
+
+    .status {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .status.ok {
+      color: #6bcB77;
+    }
+
+    .status.err {
+      color: #e06666;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="soundFields">
+    <div class="field">
+      <label>Archivo de audio</label>
+      <input type="file" id="audioFile" accept="audio/*">
+      <div class="filename" id="audioFileName">Ningún archivo seleccionado</div>
+    </div>
+
+    <div class="field">
+      <label>Volumen: <span id="volumeLabel">100</span>%</label>
+      <input type="range" id="volume" min="0" max="200" value="100">
+    </div>
+  </div>
+
+  <hr>
+  <small>Conexión con el servidor del bot (se comparte entre todos los botones)</small>
+
+  <div class="field">
+    <label>URL del WebSocket (ej: wss://tu-vps.com:8080)</label>
+    <input type="text" id="wsUrl" placeholder="wss://tu-vps.com:8080">
+  </div>
+
+  <div class="field">
+    <label>Token de autenticación (opcional)</label>
+    <input type="password" id="authToken">
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <script src="pi.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+{
+  "Actions": [
+    {
+      "Icon": "imgs/actionIcon",
+      "Name": "Reproducir Sonido",
+      "States": [
+        {
+          "Image": "imgs/actionDefaultImage",
+          "TitleAlignment": "bottom",
+          "FontSize": "9"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Envía un audio al bot de música vía WebSocket",
+      "UUID": "cl.soundbot.launchpad.play",
+      "PropertyInspectorPath": "property-inspector/pi.html"
+    },
+    {
+      "Icon": "imgs/actionIcon",
+      "Name": "Detener Sonido",
+      "States": [
+        {
+          "Image": "imgs/actionDefaultImage",
+          "TitleAlignment": "bottom",
+          "FontSize": "9",
+          "Title": "STOP"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Detiene la reproducción actual en el bot de música",
+      "UUID": "cl.soundbot.launchpad.stop",
+      "PropertyInspectorPath": "property-inspector/pi.html"
+    }
+  ],
+  "Author": "Atomik0",
+  "CodePath": "bin/plugin.js",
+  "Nodejs": {
+    "Version": "20",
+    "Debug": "--inspect=12178"
+  },
+  "Description": "Envía sonidos desde tu Stream Deck a un bot de música de Discord a través de tu servidor WebSocket (VPS), usando el mismo protocolo que tu app original.",
+  "Name": "Soundbot Discord",
+  "Icon": "imgs/pluginIcon",
+  "URL": "",
+  "Version": "1.0.0",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.4"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.15"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Category": "Soundbot Discord",
+  "CategoryIcon": "imgs/categoryIcon"
+}
