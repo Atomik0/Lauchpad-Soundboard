@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#060709">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Launchpad Pro">
+  <title>Launchpad Studio Pro Remote</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-icon-box">
+          <img src="assets/icon.png" alt="Logo" class="brand-logo">
+        </div>
+        <div class="brand-meta">
+          <div class="brand-title">LAUNCHPAD PRO</div>
+          <div class="brand-subtitle">STUDIO CONSOLE</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="status-pill" class="status-pill connecting">
+          <div class="status-dot"></div>
+          <span id="status-label">ENLAZANDO...</span>
+        </div>
+
+        <button id="fullscreen-btn" class="icon-btn" title="Pantalla Completa" aria-label="Pantalla Completa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+        </button>
+
+        <button id="open-settings-btn" class="icon-btn" title="Ajustes" aria-label="Ajustes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-content" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+      <div class="bank-bar-container">
+        <nav id="bank-bar" class="bank-bar" aria-label="Bancos de Sonidos">
+          <!-- Rendered dynamically -->
+        </nav>
+      </div>
+
+      <div class="quick-strip">
+        <button id="stop-all-btn" class="stop-all-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="5" y="5" width="14" height="14" rx="2" />
+          </svg>
+          PARAR TODO
+        </button>
+
+        <span id="active-bank-title" class="active-bank-title">AMIGOS</span>
+      </div>
+
+      <main class="grid-viewport">
+        <div class="launchpad-grid-wrapper">
+          <div id="pad-grid" class="pad-grid">
+            <!-- Rendered dynamically -->
+          </div>
+          <canvas id="lightshow-canvas"></canvas>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="ios-fullscreen-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Pantalla Completa en iPhone</h2>
+        <button id="close-ios-modal-btn" class="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="ios-instruction-box">
+        <p style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">
+          Para ocultar las barras de Safari y usar como aplicación nativa:
+        </p>
+
+        <div class="ios-step">
+          <div class="ios-step-num">1</div>
+          <div>Toca el botón <strong>Compartir</strong> en la barra inferior de Safari (el ícono del cuadrado con flecha
+            hacia arriba).</div>
+        </div>
+
+        <div class="ios-step">
+          <div class="ios-step-num">2</div>
+          <div>Desplaza la lista y selecciona <strong>Agregar a la pantalla de inicio</strong>.</div>
+        </div>
+
+        <div class="ios-step">
+          <div class="ios-step-num">3</div>
+          <div>Abre <strong>Launchpad Pro</strong> desde tu pantalla de inicio para disfrutar de pantalla completa real
+            a 120Hz sin barras de navegación.</div>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('ios-fullscreen-modal').classList.remove('active')"
+        class="modal-btn-primary">Entendido</button>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Ajustes de Conexión</h2>
+        <button id="close-settings-btn" class="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="server-url-input">Dirección Servidor PC (WebSocket)</label>
+        <input type="text" id="server-url-input" class="form-input" placeholder="ws://192.168.1.X:3000/ws-remote">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="haptic-select">Vibración Háptica al Pulsar</label>
+        <select id="haptic-select" class="form-select">
+          <option value="off">Desactivada</option>
+          <option value="light">Suave (15ms)</option>
+          <option value="medium" selected>Media (25ms)</option>
+          <option value="strong">Fuerte (45ms)</option>
+        </select>
+      </div>
+
+      <div class="form-group"
+        style="flex-direction: row; justify-content: space-between; align-items: center; padding-top: 4px;">
+        <label class="form-label" for="wakelock-toggle" style="margin: 0;">Mantener Pantalla Activa</label>
+        <input type="checkbox" id="wakelock-toggle" checked
+          style="width: 22px; height: 22px; accent-color: var(--color-primary);">
+      </div>
+
+      <button id="save-settings-btn" class="modal-btn-primary">Guardar y Reconectar</button>
+    </div>
+  </div>
+
+  <div id="toast-banner" class="toast-banner"></div>
+
+  <script src="js/wakelock.js"></script>
+  <script src="js/haptics.js"></script>
+  <script src="js/websocket.js"></script>
+  <script src="js/lighting-engine.js"></script>
+  <script src="js/pad-grid.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>

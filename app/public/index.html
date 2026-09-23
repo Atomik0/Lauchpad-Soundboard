@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Launchpad 8x8 Studio Pro</title>
+  <meta name="description"
+    content="Sistema profesional de soundboard y juegos de luces para Launchpad 8x8, Discord y streaming.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="custom-titlebar">
+    <div class="titlebar-brand">
+      <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <rect x="7" y="7" width="4" height="4" rx="1"></rect>
+        <rect x="13" y="7" width="4" height="4" rx="1"></rect>
+        <rect x="7" y="13" width="4" height="4" rx="1"></rect>
+        <rect x="13" y="13" width="4" height="4" rx="1"></rect>
+      </svg>
+      <span class="titlebar-title">LAUNCHPAD <strong>8X8</strong> STUDIO</span>
+      <span class="titlebar-version-tag" id="app-version-badge">v1.0.0</span>
+      <button id="btn-update-available" class="btn-titlebar-update"
+        style="display: none; -webkit-app-region: no-drag !important;"
+        title="Haz clic para ver y aplicar la nueva actualizacion">
+        <span class="update-pulse-dot"></span>
+        <span id="update-badge-text">ACTUALIZACION DISPONIBLE</span>
+      </button>
+    </div>
+
+    <div class="titlebar-center-actions">
+      <button id="btn-connect-hardware" class="titlebar-capsule btn-connect"
+        title="Estado de conexión del Launchpad por USB (Clic para conectar/desconectar)">
+        <span class="status-dot disconnected" id="connection-dot"></span>
+        <span id="connection-text">CONECTAR LAUNCHPAD</span>
+      </button>
+
+      <button id="btn-mobile-remote" class="titlebar-capsule btn-mobile-remote"
+        title="Pad Móvil / Control Remoto WiFi (Escanear Código QR)">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+          <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+        <span>PAD MÓVIL</span>
+        <span class="mobile-count-badge" id="mobile-remote-count-badge" style="display: none;">0</span>
+      </button>
+
+
+
+      <button id="btn-stop-all" class="titlebar-stop-btn"
+        title="Detener todos los sonidos activos de inmediato (Barra Espaciadora)">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" stroke="none">
+          <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+        </svg>
+        <span>STOP ALL</span>
+        <span class="key-badge">ESPACIO</span>
+      </button>
+
+      <button id="btn-enter-dfu" style="display: none;"></button>
+    </div>
+
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="btn-window-minimize" title="Minimizar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <button class="titlebar-btn" id="btn-window-maximize" title="Maximizar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="5" y="5" width="14" height="14" rx="1"></rect>
+        </svg>
+      </button>
+      <button class="titlebar-btn titlebar-btn-close" id="btn-window-close" title="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="6" y1="18" x2="18" y2="6"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <main class="main-layout">
+      <aside class="left-sidebar">
+        <div class="deck-scroll-container">
+          <div class="deck-card">
+            <div class="deck-card-header">
+              <span class="deck-card-title">MODO DE TRABAJO</span>
+            </div>
+            <div class="deck-mode-toggle">
+              <button id="btn-mode-live" class="btn-deck-mode active"
+                title="Modo En Vivo: Clic o Launchpad reproduce el sonido">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
+                  <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                </svg>
+                <span>EN VIVO</span>
+              </button>
+              <button id="btn-mode-edit" class="btn-deck-mode"
+                title="Modo Edicion: Clic o Launchpad selecciona sin reproducir">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                <span>EDICIÓN</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="deck-card deck-card-grow">
+            <div class="deck-card-header">
+              <div class="deck-title-with-badge">
+                <span class="deck-card-title">CAPAS</span>
+                <span class="deck-pill-count" id="deck-layers-count">1</span>
+              </div>
+              <button id="btn-add-bank" class="btn-deck-add" title="Crear nueva capa">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>NUEVA</span>
+              </button>
+            </div>
+            <div class="deck-bank-list" id="bank-pills-container">
+
+            </div>
+            <div class="deck-soundpack-actions">
+              <button id="btn-export-soundpack" class="btn-deck-pack"
+                title="Exportar la capa activa como paquete empaquetado .soundpack">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>EXPORTAR</span>
+              </button>
+              <button id="btn-import-soundpack" class="btn-deck-pack"
+                title="Importar un archivo .soundpack o .zip como nueva capa">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span>IMPORTAR</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <div class="deck-grid-toggle">
+              <button id="btn-grid-8x8" class="btn-deck-grid active" title="Matriz 8x8 (64 Pads - Launchpad Pro)">
+                <span class="grid-card-title">8×8 PRO</span>
+                <span class="grid-card-sub">64 PADS</span>
+              </button>
+              <button id="btn-grid-5x5" class="btn-deck-grid" title="Matriz 5x5 (25 Pads - Mini Pad)">
+                <span class="grid-card-title">5×5 MINI</span>
+                <span class="grid-card-sub">25 PADS</span>
+              </button>
+            </div>
+            <button id="btn-copy-from-8x8" class="btn-deck-copy" style="display: none;"
+              title="Copiar los primeros 25 pads desde el perfil 8x8">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>COPIAR DESDE 8X8</span>
+            </button>
+          </div>
+
+          <div class="deck-card deck-card-compact">
+            <div class="deck-card-header">
+              <span class="deck-card-title">ESTADO</span>
+            </div>
+            <div class="deck-legend-list">
+              <div class="deck-legend-item empty">
+                <span class="dot"></span>
+                <span class="deck-legend-text">Vacío</span>
+              </div>
+              <div class="deck-legend-item loaded">
+                <span class="dot"></span>
+                <span class="deck-legend-text">Listo (Audio)</span>
+              </div>
+              <div class="deck-legend-item playing">
+                <span class="dot"></span>
+                <span class="deck-legend-text">Sonando</span>
+              </div>
+              <div class="deck-legend-item fn-legend">
+                <span class="dot" style="background: #a855f7; box-shadow: 0 0 6px #a855f7;"></span>
+                <span class="deck-legend-text">FN (Capas)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="grid-section">
+        <div class="launchpad-chassis">
+          <div class="launchpad-hardware-header">
+            <span class="hardware-model" id="hardware-model-label">LAUNCHPAD 8X8 PRO</span>
+            <div class="hardware-status">
+              <span class="status-indicator" id="hw-status-text">MIDI SERIAL: STANDBY</span>
+            </div>
+          </div>
+
+          <div class="launchpad-frame" id="launchpad-frame">
+            <canvas id="lightshow-canvas"></canvas>
+            <div class="launchpad-grid" id="pads-grid">
+
+            </div>
+            <div class="drop-overlay" id="drop-overlay">
+              <div class="drop-overlay-box">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <div class="drop-overlay-title">SOLTAR ARCHIVOS DE AUDIO</div>
+                <div class="drop-overlay-desc">Se asignarán en fila consecutiva a partir de esta posición</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar-section">
+        <div class="card sidebar-card">
+          <div class="sidebar-tabs">
+            <button class="tab-btn active" data-tab="tab-inspector">
+              BOTON
+            </button>
+            <button class="tab-btn" data-tab="tab-discord">
+              DISCORD
+            </button>
+            <button class="tab-btn" data-tab="tab-lights">
+              LUCES
+            </button>
+            <button class="tab-btn" data-tab="tab-obs">
+              OBS
+            </button>
+          </div>
+
+          <div class="tab-content active" id="tab-inspector">
+            <div class="inspector-header-card">
+              <div class="inspector-title-row">
+                <span class="inspector-badge">INSPECTOR</span>
+                <span id="selected-pad-title" class="pad-coord-badge">#1 (Fila 1, Col 1)</span>
+              </div>
+              <div class="inspector-actions">
+                <button id="btn-test-pad" class="btn btn-primary btn-small"
+                  title="Probar audio solo en tus auriculares (sin sonar en Discord)">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                    <path
+                      d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                    </path>
+                  </svg>
+                  PROBAR LOCAL
+                </button>
+                <button id="btn-test-discord" class="btn btn-secondary btn-small"
+                  title="Probar como suena a traves del bot en Discord">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  EN DISCORD
+                </button>
+              </div>
+            </div>
+
+            <div class="batch-edit-card" id="batch-edit-card" style="display: none;">
+              <div class="batch-edit-header">
+                <div class="batch-edit-title">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  <span>EDICIÓN MASIVA DE PADS</span>
+                </div>
+                <span class="badge-edit-mode">MODO EDICIÓN</span>
+              </div>
+
+              <div class="batch-edit-body">
+                <div class="batch-control-group">
+                  <label class="control-label"
+                    style="font-size: 9.5px; color: var(--color-primary); margin-bottom: 2px;">CAMBIAR EFECTO DE LUZ A
+                    TODOS:</label>
+                  <div class="batch-input-row">
+                    <select id="select-batch-press-effect" class="select-input batch-select">
+                      <option value="default">Global: Efecto Predeterminado</option>
+                      <option value="1">Ripple (Onda Expansiva Circular)</option>
+                      <option value="2">Crosshair (Cruz Laser X-Y)</option>
+                      <option value="3">Starburst (Estallido de Particulas)</option>
+                      <option value="4">Lightning Storm (Chispazo Electrico Neon)</option>
+                      <option value="0">Direct Flash (Destello Blanco Pulsado)</option>
+                      <option value="5">Crystal Diamond (Diamante Expandible)</option>
+                      <option value="6">Volcanic Shockwave (Onda Ardiente de Fuego)</option>
+                      <option value="7">Vortex Spiral (Galaxia Espiral Cosmica)</option>
+                      <option value="8">Hyper Neon Pulse (Anillo Neon Doble Flash)</option>
+                      <option value="9">Quantum Prism (Destello Cromatico Arcoiris)</option>
+                      <option value="10">Supernova Shockwave (Doble Anillo Cuantico)</option>
+                      <option value="11">Spiral Dimension (Rafaga Espiral Psicodelica)</option>
+                      <option value="12">Tesla Arc (Arcos Voltaicos Neon)</option>
+                    </select>
+                    <button type="button" id="btn-batch-apply-effect" class="btn btn-batch-apply"
+                      title="Aplicar este efecto a todos los pads">
+                      APLICAR
+                    </button>
+                  </div>
+                </div>
+
+                <div class="batch-control-group">
+                  <label class="control-label"
+                    style="font-size: 9.5px; color: var(--color-primary); margin-bottom: 2px;">CAMBIAR MODO DE
+                    REPRODUCCIÓN A TODOS:</label>
+                  <div class="batch-input-row">
+                    <select id="select-batch-playback-mode" class="select-input batch-select">
+                      <option value="oneshot">One-Shot (Reproduccion completa)</option>
+                      <option value="toggle">Toggle (Pulsar para iniciar / parar)</option>
+                      <option value="hold">Hold (Mantener presionado)</option>
+                      <option value="loop">Loop (Bucle continuo)</option>
+                    </select>
+                    <button type="button" id="btn-batch-apply-mode" class="btn btn-batch-apply"
+                      title="Aplicar este modo a todos los pads">
+                      APLICAR
+                    </button>
+                  </div>
+                </div>
+
+                <div class="batch-filter-row">
+                  <label class="batch-checkbox-label"
+                    title="Si está marcado, solo se modifican los botones que ya tienen algún sonido cargado">
+                    <input type="checkbox" id="chk-batch-only-loaded">
+                    <span>Solo pads con audio cargado (desmarcado = todos los <span id="batch-pad-count-label">64</span>
+                      pads)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="pad-fn-controls" class="pad-fn-card" style="display: none;">
+              <div class="pad-fn-header">
+                <div class="pad-fn-badge-title">
+                  <span class="pad-fn-chip">TECLA FN</span>
+                  <span class="pad-fn-title-text">CAMBIO DE CAPAS FÍSICO</span>
+                </div>
+              </div>
+              <div class="pad-fn-description">
+                <p>Este botón está reservado como <strong>Tecla de Función (FN)</strong> para alternar capas
+                  directamente en tu Launchpad sin tocar el ratón.</p>
+                <div class="pad-fn-guide">
+                  <div class="pad-fn-step">
+                    <span class="step-num">1</span>
+                    <span><strong>Mantén presionado este pad</strong> en tu Launchpad físico.</span>
+                  </div>
+                  <div class="pad-fn-step">
+                    <span class="step-num">2</span>
+                    <span>La fila superior se iluminará mostrando las capas creadas: la activa en <strong>verde
+                        neón</strong> y las disponibles en <strong>blanco</strong>.</span>
+                  </div>
+                  <div class="pad-fn-step">
+                    <span class="step-num">3</span>
+                    <span>Presiona cualquier pad de la fila superior para cambiar instantáneamente a esa capa.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="control-group"
+                style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
+                <label class="checkbox-label"
+                  style="font-size: 11px; font-weight: 600; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                  <input type="checkbox" id="check-enable-fn-pad" checked>
+                  <span>Habilitar función FN de capas en este botón</span>
+                </label>
+                <p style="font-size: 9.5px; color: #888; margin: 4px 0 0 20px;">
+                  Si desmarcas esta opción, este botón volverá a ser un pad de sonido normal.
+                </p>
+              </div>
+            </div>
+
+            <div id="pad-normal-controls">
+              <div class="control-group">
+                <label for="input-pad-name" class="control-label">NOMBRE DEL BOTON:</label>
+                <input type="text" id="input-pad-name" class="select-input"
+                  placeholder="Ej: Skrillex Growl, Airhorn...">
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">AUDIO MP3/WAV (DRAG & DROP):</label>
+                <div class="drop-zone" id="pad-drop-zone">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <p id="drop-zone-text" class="caption">Arrastra un audio aqui o <strong>haz clic</strong></p>
+                  <input type="file" id="input-audio-file" accept="audio/*" style="display:none;">
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label class="control-label" style="margin-bottom: 0;">COLOR DEL LED / BOTON:</label>
+                  <div class="custom-color-inline">
+                    <input type="color" id="input-pad-custom-color" class="custom-color-picker"
+                      title="Elegir cualquier color RGB">
+                    <span class="custom-color-label">Libre</span>
+                  </div>
+                </div>
+                <div class="color-palette-selector" id="color-palette"></div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex"
+                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                  <label for="select-pad-press-effect" class="control-label" style="margin-bottom: 0;">EFECTO DE LUZ AL
+                    PRESIONAR:</label>
+                  <button id="btn-test-pad-light-effect" class="btn btn-secondary btn-small"
+                    style="height: 22px; padding: 0 6px; font-size: 9px;"
+                    title="Probar como ilumina este boton en el Launchpad">
+                    <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+                      <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                    </svg>
+                    PROBAR LUZ
+                  </button>
+                </div>
+                <select id="select-pad-press-effect" class="select-input">
+                  <option value="default">Global: Efecto Predeterminado</option>
+                  <option value="1">Ripple (Onda Expansiva Circular)</option>
+                  <option value="2">Crosshair (Cruz Laser X-Y)</option>
+                  <option value="3">Starburst (Estallido de Particulas)</option>
+                  <option value="4">Lightning Storm (Chispazo Electrico Neon)</option>
+                  <option value="0">Direct Flash (Destello Blanco Pulsado)</option>
+                  <option value="5">Crystal Diamond (Diamante Expandible)</option>
+                  <option value="6">Volcanic Shockwave (Onda Ardiente de Fuego)</option>
+                  <option value="7">Vortex Spiral (Galaxia Espiral Cosmica)</option>
+                  <option value="8">Hyper Neon Pulse (Anillo Neon Doble Flash)</option>
+                  <option value="9">Quantum Prism (Destello Cromatico Arcoiris)</option>
+                  <option value="10">Supernova Shockwave (Doble Anillo Cuantico)</option>
+                  <option value="11">Spiral Dimension (Rafaga Espiral Psicodelica)</option>
+                  <option value="12">Tesla Arc (Arcos Voltaicos Neon)</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label for="select-playback-mode" class="control-label">MODO DE REPRODUCCION:</label>
+                <select id="select-playback-mode" class="select-input">
+                  <option value="oneshot">One-Shot (Reproduccion completa)</option>
+                  <option value="toggle">Toggle (Pulsar para iniciar / parar)</option>
+                  <option value="hold">Hold (Mantener presionado)</option>
+                  <option value="loop">Loop (Bucle continuo)</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex">
+                  <label class="control-label">VOLUMEN PAD:</label>
+                  <span id="pad-vol-saved-badge" class="saved-badge">
+                    <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Guardado
+                  </span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="slider-pad-volume" min="0" max="200" value="100">
+                  <span id="pad-vol-label" class="slider-val">100%</span>
+                </div>
+                <div class="volume-quick-presets">
+                  <button type="button" class="btn-vol-preset" data-vol="50">50%</button>
+                  <button type="button" class="btn-vol-preset" data-vol="80">80%</button>
+                  <button type="button" class="btn-vol-preset" data-vol="100">100%</button>
+                  <button type="button" class="btn-vol-preset" data-vol="125">125%</button>
+                  <button type="button" class="btn-vol-preset" data-vol="150">150%</button>
+                  <button type="button" class="btn-vol-preset" data-vol="200">200%</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex">
+                  <label for="input-pad-hotkey" class="control-label">ATAJO GLOBAL DE TECLADO:</label>
+                  <button type="button" id="btn-clear-pad-hotkey" class="btn-preset-mini" style="font-size: 8.5px;"
+                    title="Limpiar atajo">LIMPIAR</button>
+                </div>
+                <div class="batch-input-row">
+                  <input type="text" id="input-pad-hotkey" class="text-input-field"
+                    placeholder="Ninguno (Clic en Capturar para asignar)" readonly>
+                  <button type="button" id="btn-record-hotkey" class="btn btn-secondary btn-small"
+                    title="Capturar combinación de teclas">CAPTURAR</button>
+                </div>
+                <p style="font-size: 8.5px; color: #666; margin: 3px 0 0 0;">Funciona incluso cuando la app está
+                  minimizada o en segundo plano.</p>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex">
+                  <label for="select-pad-obs-action" class="control-label">ACCIÓN OBS STUDIO:</label>
+                  <span class="obs-status-indicator" id="pad-obs-status">OBS Inactivo</span>
+                </div>
+                <div class="batch-input-row" style="margin-bottom: 4px;">
+                  <select id="select-pad-obs-action" class="select-input">
+                    <option value="none">Ninguna (Solo Audio / Sonido)</option>
+                    <option value="scene">Cambiar a Escena</option>
+                    <option value="toggle_mute">Alternar Silencio (Mute)</option>
+                    <option value="toggle_record">Alternar Grabación</option>
+                    <option value="toggle_stream">Alternar Transmisión (Stream)</option>
+                  </select>
+                </div>
+                <div id="pad-obs-target-container" style="display: none;">
+                  <input type="text" id="input-pad-obs-target" class="text-input-field"
+                    placeholder="Nombre de escena o fuente de audio en OBS">
+                </div>
+              </div>
+
+              <div class="pad-actions">
+                <button id="btn-trim-audio" class="btn btn-secondary"
+                  title="Recortar y ajustar punto de inicio y fin de este audio" style="display: none;">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                    <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                    <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+                  </svg>
+                  RECORTAR
+                </button>
+                <button id="btn-record-mic" class="btn btn-secondary">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                  </svg>
+                  GRABAR MIC
+                </button>
+                <button id="btn-clear-pad" class="btn btn-danger-outline">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  BORRAR
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-discord">
+            <div class="control-header-flex" style="margin-bottom: 4px;">
+              <h2 class="card-title" style="margin: 0;">BOT DISCORD & AUDIO</h2>
+              <button type="button" id="btn-toggle-vps-config" class="btn-preset-mini"
+                title="Configurar Servidor VPS y Clave de Acceso">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
+                </svg>
+                VPS CONFIG
+              </button>
+            </div>
+
+            <div id="vps-config-panel" class="vps-config-box" style="display: none;">
+              <div class="control-group" style="margin-bottom: 6px;">
+                <label class="control-label" style="font-size: 9px;">DIRECCION DEL SERVIDOR (WEBSOCKET):</label>
+                <input type="text" id="input-bot-vps-url" class="text-input-field" placeholder="ws://localhost:3002"
+                  value="ws://localhost:3002">
+              </div>
+              <div class="control-group" style="margin-bottom: 6px;">
+                <label class="control-label" style="font-size: 9px;">CLAVE DE ACCESO (TOKEN):</label>
+                <div style="display: flex; gap: 4px;">
+                  <input type="password" id="input-bot-vps-token" class="text-input-field" placeholder="Clave secreta"
+                    value="launchpad2026">
+                  <button type="button" id="btn-toggle-token-visibility" class="btn btn-secondary btn-small"
+                    title="Mostrar/Ocultar clave">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                  <button type="button" id="btn-save-vps-config" class="btn btn-primary btn-small"
+                    title="Guardar y Conectar a VPS">CONECTAR</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bot-card-container">
+              <div class="bot-status-header">
+                <div class="bot-avatar-area">
+                  <div class="bot-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="18" height="12" x="3" y="6" rx="2"></rect>
+                      <circle cx="9" cy="12" r="1.5"></circle>
+                      <circle cx="15" cy="12" r="1.5"></circle>
+                      <path d="M12 2v4M2 12h1M21 12h1"></path>
+                    </svg>
+                  </div>
+                  <div class="bot-info-texts">
+                    <div class="bot-username" id="bot-username-display">DJM BOT 24/7</div>
+                    <div class="bot-meta-subtitle" id="bot-servers-display">Conectando al Bot de Discord...</div>
+                  </div>
+                </div>
+                <div class="bot-badge disconnected" id="bot-badge-status">
+                  <span id="bot-badge-text">CONECTANDO...</span>
+                </div>
+              </div>
+
+              <div class="bot-card-divider"></div>
+
+              <div class="control-group">
+                <label for="select-bot-voice-channel" class="control-label">CANAL DE VOZ:</label>
+                <select id="select-bot-voice-channel" class="select-input">
+                  <option value="">Cargando canales de voz del bot...</option>
+                </select>
+              </div>
+
+              <div class="bot-buttons-grid">
+                <button type="button" id="btn-bot-join-selected" class="btn btn-primary"
+                  title="Conectar el bot al canal de voz seleccionado">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                  </svg>
+                  CONECTAR
+                </button>
+                <button type="button" id="btn-bot-leave" class="btn btn-secondary"
+                  title="Desconectar el bot del canal de voz">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  DESCONECTAR
+                </button>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex">
+                  <label class="control-label" style="margin-bottom: 0;">VOLUMEN TRANSMISION DISCORD:</label>
+                  <span id="bot-discord-vol-label" class="slider-val">100%</span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="slider-bot-discord-volume" min="0" max="150" value="100">
+                </div>
+              </div>
+
+              <div class="bot-anti-eco-box">
+                <label class="bot-anti-eco-label">
+                  <input type="checkbox" id="chk-mute-local-on-discord" checked class="bot-anti-eco-check">
+                  <span class="bot-anti-eco-text">Silenciar reproduccion local al emitir (evita eco)</span>
+                </label>
+              </div>
+
+              <div class="bot-notice-box">
+                <p>Audio transmitido por WebSocket en tiempo real hacia el canal de voz.</p>
+              </div>
+            </div>
+
+            <div class="local-monitor-card">
+              <div class="local-monitor-header">
+                <div class="local-monitor-title">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                    <path
+                      d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                    </path>
+                  </svg>
+                  <span>MONITOR LOCAL</span>
+                </div>
+                <span class="local-monitor-tag">AURICULARES</span>
+              </div>
+
+              <div class="control-group">
+                <label for="select-output-headphones" class="control-label">DISPOSITIVO DE SALIDA:</label>
+                <div class="select-with-btn">
+                  <select id="select-output-headphones" class="select-input"></select>
+                  <button id="btn-test-headphones" class="btn btn-secondary btn-small"
+                    title="Reproducir tono de prueba en audifonos">
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    TEST
+                  </button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-header-flex">
+                  <label class="control-label" style="margin-bottom: 0;">VOLUMEN MASTER LOCAL:</label>
+                  <span id="master-vol-label" class="slider-val">100%</span>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="slider-master-volume" min="0" max="150" value="100">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-lights">
+            <div class="control-header-flex" style="margin-bottom: 4px;">
+              <h2 class="card-title" style="margin: 0;">SISTEMA DE LUCES LED</h2>
+              <span class="local-monitor-tag">LAUNCHPAD FX</span>
+            </div>
+
+            <div class="lights-presets-container">
+              <div class="lights-presets-header">
+                <span class="control-label" style="font-size: 9px; margin: 0;">ESTILOS LISTOS EN 1 CLIC:</span>
+                <span style="font-size: 8.5px; color: #777;">Selecciona uno para empezar</span>
+              </div>
+              <div class="lights-presets-grid">
+                <button type="button" class="btn-light-preset" data-preset="club"
+                  title="Efecto Ripple + Mandala Psicodelico">
+                  <span class="preset-name">DJ CLUB</span>
+                  <span class="preset-desc">Neon Reactivo</span>
+                </button>
+                <button type="button" class="btn-light-preset" data-preset="matrix"
+                  title="Cruz Laser + Lluvia Digital Verde">
+                  <span class="preset-name">CYBER MATRIX</span>
+                  <span class="preset-desc">Lluvia Verde</span>
+                </button>
+                <button type="button" class="btn-light-preset" data-preset="fire"
+                  title="Onda Ardiente + Llamas de Fuego">
+                  <span class="preset-name">VOLCANO</span>
+                  <span class="preset-desc">Fuego Solar</span>
+                </button>
+                <button type="button" class="btn-light-preset" data-preset="minimal"
+                  title="Destello Blanco + Fondo Estatico Discreto">
+                  <span class="preset-name">DISCRETO</span>
+                  <span class="preset-desc">Solo Botones</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="lights-card-section">
+              <div class="effect-preview-box" id="press-effect-preview-box">
+                <div class="effect-preview-screen" title="Haz clic en cualquier pad de la matriz para ver la animacion">
+                  <canvas id="effect-preview-canvas" width="320" height="335"></canvas>
+                  <div class="effect-preview-overlay">
+                    <span id="preview-effect-title" class="preview-title-tag">RIPPLE</span>
+                    <span id="preview-effect-desc" class="preview-desc-tag">Onda expansiva circular 360</span>
+                  </div>
+                </div>
+
+                <div class="effect-quick-chips" id="effect-quick-chips"></div>
+              </div>
+
+              <select id="select-press-effect" style="display: none;">
+                <option value="1">Ripple</option>
+                <option value="2">Crosshair</option>
+                <option value="3">Starburst</option>
+                <option value="4">Lightning Storm</option>
+                <option value="0">Direct Flash</option>
+                <option value="5">Crystal Diamond</option>
+                <option value="6">Volcanic Shockwave</option>
+                <option value="7">Vortex Spiral</option>
+                <option value="8">Hyper Neon Pulse</option>
+                <option value="9">Quantum Prism</option>
+                <option value="10">Supernova Shockwave</option>
+                <option value="11">Spiral Dimension</option>
+                <option value="12">Tesla Arc</option>
+              </select>
+            </div>
+
+            <div class="lights-card-section">
+              <div class="lights-section-header">
+                <div class="lights-section-title">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  <span>2. ANIMACION CONTINUA DE FONDO</span>
+                </div>
+              </div>
+
+              <div class="idle-category-pills" id="idle-category-pills">
+                <button type="button" class="idle-pill active" data-category="all">TODOS</button>
+                <button type="button" class="idle-pill" data-category="audio">AUDIO</button>
+                <button type="button" class="idle-pill" data-category="psycho">PSICODELIA</button>
+                <button type="button" class="idle-pill" data-category="fluid">FLUIDOS</button>
+                <button type="button" class="idle-pill" data-category="energy">ENERGIA</button>
+                <button type="button" class="idle-pill" data-category="simple">OFF</button>
+              </div>
+
+              <div class="idle-effects-grid" id="idle-effects-grid"></div>
+
+              <div class="idle-effect-active-card" id="idle-effect-active-card">
+                <span class="idle-active-label">FONDO:</span>
+                <span id="idle-active-name" class="idle-active-name">Acid Mandala</span>
+                <span id="idle-active-desc" class="idle-active-desc">Caleidoscopio psicodelico fractal</span>
+              </div>
+
+              <select id="select-idle-effect" class="select-input" style="display: none;"></select>
+            </div>
+
+            <div class="lights-card-section">
+              <div class="lights-section-header">
+                <div class="lights-section-title">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"></path>
+                  </svg>
+                  <span>3. COMO SE COMBINAN LOS COLORES</span>
+                </div>
+              </div>
+
+              <div class="blend-segmented-control" id="blend-segmented-control">
+                <button type="button" class="blend-segment-btn active" data-blend="0">
+                  <span class="blend-btn-title">FUSION NEON</span>
+                  <span class="blend-btn-badge">RECOMENDADO</span>
+                </button>
+                <button type="button" class="blend-segment-btn" data-blend="1">
+                  <span class="blend-btn-title">BOTONES PUROS</span>
+                  <span class="blend-btn-badge">COLOR 100%</span>
+                </button>
+                <button type="button" class="blend-segment-btn" data-blend="2">
+                  <span class="blend-btn-title">FONDO TOTAL</span>
+                  <span class="blend-btn-badge">AL TOCAR</span>
+                </button>
+              </div>
+
+              <div class="blend-mode-desc-box">
+                <span id="blend-mode-desc-text" class="blend-mode-desc-text">
+                  La animacion de fondo resalta tus botones sin tapar sus colores.
+                </span>
+              </div>
+
+              <select id="select-blend-mode" class="select-input" style="display: none;"></select>
+            </div>
+
+            <div style="margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--color-border);">
+              <button id="btn-force-sync-hardware" class="btn btn-primary" style="width: 100%; justify-content: center;"
+                title="Reenviar todos los colores y efectos al Launchpad por USB">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                  <path d="M8 16H3v5"></path>
+                </svg>
+                ENVIAR LUCES AL LAUNCHPAD USB
+              </button>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-obs">
+            <div class="control-header-flex" style="margin-bottom: 4px;">
+              <h2 class="card-title" style="margin: 0;">OBS STUDIO (WEBSOCKET)</h2>
+            </div>
+            <p style="font-size: 9.5px; color: #888; margin: 0 0 8px 0; line-height: 13px;">
+              Controla cambios de escena, silenciar micrófono, grabación y stream en vivo desde los botones de tu
+              Launchpad.
+            </p>
+
+            <div class="bot-card-container">
+              <div class="bot-status-header">
+                <div class="bot-avatar-area">
+                  <div class="bot-info-texts">
+                    <div class="bot-username">OBS WEBSOCKET V5</div>
+                  </div>
+                </div>
+                <div class="bot-badge disconnected" id="obs-badge-status">
+                  <span id="obs-badge-text">DESCONECTADO</span>
+                </div>
+              </div>
+
+              <div id="obs-status-feedback" class="obs-status-feedback hidden">
+                <div class="obs-feedback-icon" id="obs-feedback-icon">!</div>
+                <div class="obs-feedback-text" id="obs-feedback-text">
+                  OBS Studio no está iniciado o el servidor WebSocket está apagado.
+                </div>
+              </div>
+
+              <div class="bot-selectors-area">
+                <div class="bot-field-group">
+                  <label class="control-label" style="font-size: 9px;">CONTRASENA DE ACCESO (OPCIONAL):</label>
+                  <div style="display: flex; gap: 4px;">
+                    <input type="password" id="input-obs-password" class="text-input-field"
+                      placeholder="Dejar en blanco si no tiene contrasena">
+                    <button type="button" id="btn-toggle-obs-password" class="btn btn-secondary btn-small"
+                      title="Mostrar/Ocultar contrasena">
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div style="margin-top: 2px;">
+                  <button type="button" id="btn-toggle-obs-advanced" class="btn-text-link"
+                    style="font-size: 9px; color: #888; background: none; border: none; padding: 2px 0; cursor: pointer; text-decoration: underline;">
+                    + Ajustes avanzados (IP o puerto personalizado)
+                  </button>
+                  <div id="obs-advanced-panel" style="display: none; margin-top: 6px;">
+                    <label class="control-label" style="font-size: 9px;">DIRECCION DEL SERVIDOR (WEBSOCKET):</label>
+                    <input type="text" id="input-obs-url" class="text-input-field" placeholder="ws://127.0.0.1:4455"
+                      value="ws://127.0.0.1:4455">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bot-buttons-grid">
+                <button type="button" id="btn-obs-connect" class="btn btn-primary"
+                  title="Detectar y conectar a OBS Studio">
+                  AUTODETECTAR
+                </button>
+                <button type="button" id="btn-obs-disconnect" class="btn btn-secondary"
+                  title="Desconectar de OBS Studio" disabled>
+                  DESCONECTAR
+                </button>
+              </div>
+
+              <div
+                style="margin-top: 8px; padding: 7px 9px; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 4px; font-size: 9px; color: #888; line-height: 13px;">
+                <strong style="color: #aaa;">Como activar en OBS Studio:</strong> Ve al menu superior <em>Herramientas
+                  -&gt; Ajustes del servidor WebSocket</em> (o <em>Configuracion del servidor WebSocket</em>). Marca la
+                casilla <em>"Habilitar el servidor WebSocket"</em> (puerto 4455). Si tienes activada autenticacion,
+                copia la contrasena aqui.
+              </div>
+            </div>
+
+            <div class="local-monitor-card" style="margin-top: 10px;">
+              <div class="local-monitor-header">
+                <div class="local-monitor-title">
+                  <span>ESCENAS & ESTADO DE OBS</span>
+                </div>
+                <span class="local-monitor-tag" id="obs-current-scene-tag">ESCENA: N/A</span>
+              </div>
+              <div class="control-group" style="margin-top: 6px;">
+                <label for="select-obs-scenes" class="control-label">CAMBIAR ESCENA MANUALMENTE:</label>
+                <div class="select-with-btn">
+                  <select id="select-obs-scenes" class="select-input">
+                    <option value="">(Conecta OBS para ver escenas)</option>
+                  </select>
+                  <button type="button" id="btn-obs-switch-scene" class="btn btn-secondary btn-small"
+                    title="Activar escena seleccionada">
+                    CAMBIAR
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button type="button" id="btn-obs-toggle-stream" class="btn btn-secondary btn-small" style="flex: 1;"
+                  title="Iniciar o detener transmisión en OBS">
+                  STREAM
+                </button>
+                <button type="button" id="btn-obs-toggle-record" class="btn btn-secondary btn-small" style="flex: 1;"
+                  title="Iniciar o detener grabación en OBS">
+                  GRABAR
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="modal-backdrop" id="record-modal" style="display:none;">
+      <div class="modal modal-card">
+        <h2 class="modal-title" style="display: flex; align-items: center; gap: 7px;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+          GRABADORA RAPIDA DE VOZ
+        </h2>
+        <p class="body-md" style="margin-bottom:10px; font-size: 11px; color: #888;">Graba muestras de voz directamente
+          al pad seleccionado.</p>
+
+        <div class="recorder-viz" id="recorder-viz">
+          <div class="rec-pulse"></div>
+          <span id="record-timer" class="timer-display">00:00</span>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="btn-start-record" class="btn btn-danger">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" stroke="none">
+              <circle cx="12" cy="12" r="7"></circle>
+            </svg>
+            GRABAR
+          </button>
+          <button id="btn-stop-record" class="btn btn-primary" style="display:none;">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            GUARDAR
+          </button>
+          <button id="btn-cancel-record" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            CANCELAR
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-onboarding-wizard" class="modal-backdrop" style="display: none;">
+      <div class="modal-card onboarding-card">
+        <div class="onboarding-header">
+          <div class="onboarding-badge-tag">ASISTENTE DE CONFIGURACION</div>
+          <h2 class="onboarding-title" id="onboarding-title">BIENVENIDO A LAUNCHPAD STUDIO</h2>
+          <div class="onboarding-steps-indicator">
+            <span class="step-dot active" data-step="1">1</span>
+            <span class="step-line"></span>
+            <span class="step-dot" data-step="2">2</span>
+            <span class="step-line"></span>
+            <span class="step-dot" data-step="3">3</span>
+          </div>
+        </div>
+
+        <div class="onboarding-body">
+          <div class="onboarding-step-content" id="onboarding-step-1">
+            <p class="onboarding-desc">
+              Esta aplicacion te permite reproducir efectos de sonido al instante, transmitirlos a tus canales de voz de
+              Discord y sincronizar efectos de iluminacion interactivos.
+            </p>
+            <div class="onboarding-feature-grid">
+              <div class="onboarding-feature-box">
+                <div class="feature-title">Soundboard de Alta Calidad</div>
+                <div class="feature-desc">Reproduce audios con cero latencia utilizando teclado o Launchpad fisico.
+                </div>
+              </div>
+              <div class="onboarding-feature-box">
+                <div class="feature-title">Bot de Discord Integrado</div>
+                <div class="feature-desc">Transmite directamente a tu llamada para que tus amigos escuchen tus audios.
+                </div>
+              </div>
+            </div>
+            <p class="onboarding-note">
+              Para comenzar, configuremos en 2 simples pasos la conexion con el Bot de Discord.
+            </p>
+          </div>
+
+          <div class="onboarding-step-content" id="onboarding-step-2" style="display: none;">
+            <p class="onboarding-desc">
+              Selecciona donde se encuentra ejecutandose el Bot de Discord:
+            </p>
+            <div class="onboarding-options-container">
+              <label class="onboarding-option-card active" id="opt-mode-vps">
+                <input type="radio" name="wizard-bot-mode" value="vps" checked style="display: none;">
+                <div class="option-header">
+                  <span class="option-title">Servidor en la Nube (VPS)</span>
+                  <span class="option-tag">Recomendado</span>
+                </div>
+                <div class="option-desc">El bot corre en un servidor dedicado 24/7 al que tu y tus amigos pueden
+                  conectarse.</div>
+              </label>
+
+              <label class="onboarding-option-card" id="opt-mode-local">
+                <input type="radio" name="wizard-bot-mode" value="local" style="display: none;">
+                <div class="option-header">
+                  <span class="option-title">Ejecutar Bot en mi Computadora</span>
+                  <span class="option-tag">Local</span>
+                </div>
+                <div class="option-desc">El bot se ejecuta en esta misma PC desde la carpeta bot_discord
+                  (localhost:3002).</div>
+              </label>
+            </div>
+
+            <div class="onboarding-inputs-area" id="wizard-inputs-container">
+              <div class="control-group" style="margin-bottom: 8px;">
+                <label class="control-label" style="font-size: 10px;">DIRECCION DEL SERVIDOR WEBSOCKET:</label>
+                <input type="text" id="wizard-input-url" class="text-input-field"
+                  placeholder="ws://tu-ip-o-dominio:3002" value="ws://localhost:3002">
+              </div>
+              <div class="control-group">
+                <label class="control-label" style="font-size: 10px;">CLAVE DE ACCESO (SECRET KEY):</label>
+                <input type="text" id="wizard-input-token" class="text-input-field" placeholder="launchpad2026"
+                  value="launchpad2026">
+              </div>
+              <div id="wizard-step2-live-status" class="test-status-area" style="margin-top: 10px;">
+                Listo para verificar conexion
+              </div>
+            </div>
+          </div>
+
+          <div class="onboarding-step-content" id="onboarding-step-3" style="display: none;">
+            <p class="onboarding-desc">
+              Verificacion de enlace con el servidor de Discord.
+            </p>
+            <div class="onboarding-test-box">
+              <div class="test-target-label">Destino a conectar:</div>
+              <div class="test-target-val" id="wizard-test-url-label">ws://localhost:3002</div>
+              <div class="test-status-area" id="wizard-test-status">
+                <span class="status-indicator">Listo para comprobar conexion</span>
+              </div>
+              <button type="button" id="btn-wizard-test-connection" class="btn btn-secondary btn-small"
+                style="margin-top: 8px;">
+                PROBAR CONEXION AHORA
+              </button>
+            </div>
+            <p class="onboarding-note" style="margin-top: 10px;">
+              Al guardar, podras compilar versiones listas para tus amigos con esta misma direccion configurada
+              automaticamente.
+            </p>
+          </div>
+        </div>
+
+        <div class="onboarding-footer">
+          <button type="button" id="btn-wizard-prev" class="btn btn-secondary" style="display: none;">
+            ATRAS
+          </button>
+          <div style="flex: 1;"></div>
+          <button type="button" id="btn-wizard-skip" class="btn btn-secondary btn-small" style="margin-right: 6px;">
+            OMITIR POR AHORA
+          </button>
+          <button type="button" id="btn-wizard-next" class="btn btn-primary">
+            CONTINUAR
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Actualizacion de la Aplicacion -->
+    <div id="modal-app-update" class="modal-backdrop">
+      <div class="modal-update-card">
+        <div class="update-modal-header">
+          <div class="update-header-left">
+            <span class="update-badge-tag">ACTUALIZACION DISPONIBLE</span>
+            <h2 id="update-modal-title" class="update-modal-title">LAUNCHPAD STUDIO PRO</h2>
+          </div>
+          <button class="btn-modal-close" id="btn-close-update-modal" title="Cerrar ventana">&times;</button>
+        </div>
+
+        <div class="update-modal-body">
+          <div class="update-instructions">
+            <span>Se ha detectado una version superior en GitHub. Puedes actualizar tu aplicacion en segundos sin perder
+              tus audios ni configuraciones.</span>
+          </div>
+
+          <div class="update-notes-container">
+            <label class="update-notes-label">NOVEDADES Y CAMBIOS:</label>
+            <div class="update-notes-box" id="update-modal-notes">
+              Cargando notas de la version...
+            </div>
+          </div>
+
+          <div id="update-progress-section" style="display: none;">
+            <div class="progress-info-row"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span id="update-progress-status" class="progress-status-text">Descargando actualizacion...</span>
+              <span id="update-progress-pct" class="progress-pct-text">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="update-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="update-modal-footer">
+          <div class="update-left-actions">
+            <button type="button" class="btn btn-secondary" id="btn-update-view-github">
+              VER EN GITHUB
+            </button>
+          </div>
+          <div class="update-right-actions">
+            <button type="button" class="btn btn-secondary" id="btn-update-later">
+              MAS TARDE
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-update-install-now">
+              ACTUALIZAR Y REINICIAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal del Cortador de Audio (Audio Trimmer) -->
+    <div id="modal-audio-trimmer" class="modal-backdrop">
+      <div class="modal-trimmer-card">
+        <div class="trimmer-modal-header">
+          <div class="trimmer-header-left">
+            <span class="trimmer-badge-tag">CORTADOR DE AUDIO</span>
+            <h2 id="trimmer-modal-title" class="trimmer-modal-title">RECORTAR SONIDO</h2>
+          </div>
+          <button class="btn-modal-close" id="btn-close-trimmer-modal" title="Cerrar ventana">&times;</button>
+        </div>
+
+        <div class="trimmer-modal-body">
+          <div class="trimmer-instructions">
+            <span>Arrastra los tiradores <strong class="text-neon-start">INICIO</strong> y <strong
+                class="text-neon-end">FIN</strong> sobre la forma de onda, o ajusta los segundos de precisión.</span>
+          </div>
+
+          <div class="trimmer-canvas-wrapper" id="trimmer-canvas-wrapper">
+            <canvas id="trimmer-waveform-canvas"></canvas>
+            <div class="trimmer-dimmer trimmer-dimmer-left" id="trimmer-dimmer-left"></div>
+            <div class="trimmer-dimmer trimmer-dimmer-right" id="trimmer-dimmer-right"></div>
+            <div class="trimmer-handle trimmer-handle-start" id="trimmer-handle-start"
+              title="Arrastrar punto de inicio">
+              <div class="trimmer-handle-line"></div>
+              <div class="trimmer-handle-tag">INICIO</div>
+            </div>
+            <div class="trimmer-handle trimmer-handle-end" id="trimmer-handle-end" title="Arrastrar punto de fin">
+              <div class="trimmer-handle-line"></div>
+              <div class="trimmer-handle-tag">FIN</div>
+            </div>
+            <div class="trimmer-playhead" id="trimmer-playhead" style="display: none;"></div>
+          </div>
+
+          <div class="trimmer-timing-panel">
+            <div class="trimmer-time-field">
+              <label class="trimmer-time-label">PUNTO DE INICIO:</label>
+              <div class="trimmer-input-box">
+                <input type="number" id="input-trim-start" class="trimmer-num-input" step="0.01" min="0" value="0.00">
+                <span class="trimmer-input-unit">s</span>
+              </div>
+            </div>
+
+            <div class="trimmer-duration-display">
+              <span class="trimmer-dur-label">DURACIÓN RECORTADA</span>
+              <span class="trimmer-dur-val" id="label-trim-duration">0.00s</span>
+              <span class="trimmer-dur-total" id="label-trim-total">de 0.00s total</span>
+            </div>
+
+            <div class="trimmer-time-field">
+              <label class="trimmer-time-label">PUNTO DE FIN:</label>
+              <div class="trimmer-input-box">
+                <input type="number" id="input-trim-end" class="trimmer-num-input" step="0.01" min="0" value="0.00">
+                <span class="trimmer-input-unit">s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trimmer-modal-footer">
+          <div class="trimmer-left-actions">
+            <button type="button" class="btn btn-secondary" id="btn-trim-reset"
+              title="Restaurar el audio original completo sin recortes">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>ORIGINAL</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-trim-preview">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+                <polygon points="6 3 20 12 6 21 6 3"></polygon>
+              </svg>
+              <span id="btn-trim-preview-text">PROBAR SELECCIÓN</span>
+            </button>
+          </div>
+          <div class="trimmer-right-actions">
+            <button type="button" class="btn btn-secondary" id="btn-trim-cancel">
+              CANCELAR
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-trim-save">
+              GUARDAR RECORTE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-mobile-remote" class="modal-backdrop" style="display: none;">
+      <div class="modal-card" style="max-width: 480px; text-align: center;">
+        <div class="update-modal-header"
+          style="justify-content: space-between; display: flex; align-items: center; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--color-primary)" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+            <h2 class="modal-title" style="margin: 0; font-size: 16px; font-weight: 700;">PAD MÓVIL / CONTROL REMOTO
+            </h2>
+          </div>
+          <button class="btn-modal-close" id="btn-close-mobile-modal" title="Cerrar ventana">&times;</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+          <p style="font-size: 13px; color: var(--color-text-muted); margin: 0; line-height: 1.4;">
+            Escanea este código QR con la cámara de tu teléfono (Android o iOS) conectado a la misma red WiFi para
+            usarlo como pad físico táctil.
+          </p>
+
+          <div id="qr-container"
+            style="background: #FFFFFF; padding: 12px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; min-width: 200px; min-height: 200px;">
+            <img id="mobile-qr-img" src="" alt="Código QR Pad Móvil"
+              style="width: 200px; height: 200px; display: block;">
+          </div>
+
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+            <div
+              style="font-size: 11px; font-family: var(--font-mono); color: var(--color-primary); text-transform: uppercase;">
+              Dirección de acceso local</div>
+            <div style="display: flex; gap: 6px; width: 100%;">
+              <input type="text" id="mobile-url-input" readonly
+                style="flex: 1; background: #0A0A0C; border: 1px solid var(--color-border); border-radius: 6px; padding: 8px 12px; font-family: var(--font-mono); font-size: 13px; color: #FFFFFF; outline: none;">
+              <button type="button" class="btn btn-secondary" id="btn-copy-mobile-url"
+                style="padding: 0 14px; font-size: 12px;">COPIAR</button>
+            </div>
+          </div>
+
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding-top: 10px; border-top: 1px solid var(--color-border); font-size: 12px; font-family: var(--font-mono); color: var(--color-text-muted);">
+            <span>Dispositivos conectados:</span>
+            <span id="mobile-connected-status" style="color: var(--color-primary); font-weight: 700;">0 activos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

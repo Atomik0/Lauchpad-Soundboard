@@ -1,0 +1,9 @@
+{
+  "appId": "com.launchpad.studiomobile",
+  "appName": "Launchpad Studio Mobile",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "cleartext": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Launchpad Studio Mobile",
+  "short_name": "Launchpad Pad",
+  "description": "Controlador físico táctil de baja latencia para Launchpad Studio Pro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0A0A0C",
+  "theme_color": "#0A0A0C",
+  "icons": [
+    {
+      "src": "assets/icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

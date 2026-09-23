@@ -1,0 +1,19 @@
+{
+  "name": "launchpad-studio-mobile",
+  "version": "1.0.0",
+  "description": "Mobile remote physical pad for Launchpad Studio Pro",
+  "scripts": {
+    "dev": "npx serve -l 3005 .",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android"
+  },
+  "keywords": [
+    "soundboard",
+    "launchpad",
+    "remote",
+    "mobile",
+    "touchpad"
+  ],
+  "author": "Launchpad Studio Pro",
+  "license": "MIT"
+}
